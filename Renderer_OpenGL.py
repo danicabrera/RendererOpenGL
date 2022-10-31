@@ -3,7 +3,7 @@ from pygame.locals import *
 
 from shaders import *
 
-from gl import Renderer, Buffer
+from gl import Renderer
 
 width = 960
 height = 540
@@ -19,20 +19,17 @@ rend = Renderer(screen)
 
 rend.setShaders(vertex_shader, fragment_shader)
 
-#           Positions         Colors
-triangle = [-0.5, -0.5, 0,    1.0, 0.0, 0.0,
-               0,  0.5, 0,    0.0, 1.0, 0.0,
-             0.5, -0.5, 0,    0.0, 0.0, 1.0 ]
+face = Model("model.obj")
 
-triangle = Buffer(triangle)
-triangle.position.z -= 10
+face.position.z -= 10
 
-rend.scene.append( triangle )
+rend.scene.append( face )
 
 
 isRunning = True
 
 while isRunning:
+
     keys = pygame.key.get_pressed()
 
     for event in pygame.event.get():
@@ -43,19 +40,25 @@ while isRunning:
             if event.key == pygame.K_ESCAPE:
                 isRunning = False
 
-    deltaTime = clock.tick(60) / 1000
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    isRunning = False
+                elif event.key == pygame.K_F:
+                    rend.filledMode()
+
+
 
     if keys[K_LEFT]:
-        rend.camPosition.x -=10 * deltaTime
+        rend.camPosition.x -= 10 * deltaTime
 
-    if keys[K_RIGHT]:
-        rend.camPosition.x +=10 * deltaTime
+    elif keys[K_RIGHT]:
+        rend.camPosition.x += 10 * deltaTime
 
-
-
+    deltaTime = clock.tick(60) / 1000
 
     #print(deltaTime)
 
+    rend.update()
     rend.render()
     pygame.display.flip()
 
