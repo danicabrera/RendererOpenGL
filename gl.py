@@ -7,10 +7,11 @@ from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 
 from obj import Obj
+from pygame import image
 
 
 class Model(object):
-    def __init__(self, objName):
+    def __init__(self, objName, textureName):
         self.model = Obj(objName)
 
         self.createVertexBuffer()
@@ -150,6 +151,7 @@ class Model(object):
                      )
 
 
+        glGenerateMipmap(GL_TEXTURE_2D)
         glDrawArrays(GL_TRIANGLES, 0, self.polycount * 3)
 
 
@@ -161,9 +163,19 @@ class Renderer(object):
         glEnable(GL_DEPTH_TEST)
         glViewport(0, 0, self.width, self.height)
 
+        self.filledMode()
+
         self.scene = []
         self.active_shader = None
-        self.Time
+
+        self.pointLight = glm.vec3(0,0,0)
+        self.Time = 0
+        self.value = 0
+
+        self.target = glm.vec3(0,0,0)
+        self.angle = 0
+        self.camDistance = 5
+
 
         # ViewMatrix
         self.camPosition = glm.vec3(0, 0, 0)
@@ -175,8 +187,12 @@ class Renderer(object):
                                                 self.width / self.height,  # Aspect Ratio
                                                 0.1,  # Near Plane
                                                 1000)  # Far Plane
+
     def filledMode(self):
-        pass
+        glPolygonMode(GL_FRONT, GL_FILL)
+
+    def wireframeMode(self):
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
 
     def getViewMatrix(self):
         identity = glm.mat4(1)
@@ -201,7 +217,8 @@ class Renderer(object):
             self.active_shader = None
 
     def update(self):
-        self.viewMatrix = glm.lookAt(self.camRotation)
+        self.viewMatrix = self.getViewMatrix()
+        # self.viewMatrix = glm.lookAt(self.camPosition, self.target, glm.vec3(0,1,0))
 
     def render(self):
         glClearColor(0.2, 0.2, 0.2, 1)
@@ -218,7 +235,7 @@ class Renderer(object):
 
             glUniform1i( glGetUniformLocation(self.active_shader, "tex"), 0)
 
-            glUniform1i( glGetUniformLocation(self.active_shader, "time"), self.Time)
+            glUniform1f( glGetUniformLocation(self.active_shader, "time"), self.Time)
 
             glUniform3fv(glGetUniformLocation(self.active_shader, "pointLight"), 1, glm.value_ptr(self.pointLight))
 

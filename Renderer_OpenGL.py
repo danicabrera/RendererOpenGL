@@ -1,9 +1,10 @@
+from pickle import *
 import pygame
 from pygame.locals import *
 
 from shaders import *
 
-from gl import Renderer
+from gl import Renderer, Model
 
 width = 960
 height = 540
@@ -17,11 +18,16 @@ clock = pygame.time.Clock()
 
 rend = Renderer(screen)
 
-rend.setShaders(vertex_shader, fragment_shader)
+rend.setShaders(vertex_shader, fragment_toon_shader)
 
-face = Model("model.obj")
+rend.target.z = -5
 
-face.position.z -= 10
+face = Model("Penguin.obj", "Penguin.bmp")
+
+face.position.z -= 5
+face.scale.x = 2
+face.scale.y = 2
+face.scale.z = 2
 
 rend.scene.append( face )
 
@@ -40,23 +46,44 @@ while isRunning:
             if event.key == pygame.K_ESCAPE:
                 isRunning = False
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    isRunning = False
-                elif event.key == pygame.K_F:
-                    rend.filledMode()
+            elif event.key == pygame.K_z:
+                rend.filledMode()
+            elif event.key == pygame.K_x:
+                rend.wireframeMode()
 
+            
+
+
+
+    if keys[K_a]:
+        rend.camPosition.x -= 30 * deltaTime
+
+    elif keys[K_d]:
+        rend.camPosition.x += 30 * deltaTime
+
+
+    if keys[K_w]:
+        rend.camPosition.y += 10 * deltaTime
+
+    elif keys[K_s]:
+        rend.camPosition.y -= 10 * deltaTime
 
 
     if keys[K_LEFT]:
-        rend.camPosition.x -= 10 * deltaTime
+        rend.pointLight.x -= 10 * deltaTime
 
     elif keys[K_RIGHT]:
-        rend.camPosition.x += 10 * deltaTime
+        rend.pointLight.x += 10 * deltaTime
+
+    elif keys[K_UP]:
+        rend.pointLight.y += 10 * deltaTime
+
+    elif keys[K_DOWN]:
+        rend.pointLight.y -= 10 * deltaTime
 
     deltaTime = clock.tick(60) / 1000
 
-    #print(deltaTime)
+    rend.Time += deltaTime
 
     rend.update()
     rend.render()
