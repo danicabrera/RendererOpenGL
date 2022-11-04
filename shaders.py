@@ -25,7 +25,7 @@ void main()
     pos = (modelMatrix * vec4(position, 1.0)).xyz;
     
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
-     
+    
      
 }
 '''
@@ -79,5 +79,67 @@ void main()
 
     
     fragColor = texture(tex, UVs) * intensity;
+}
+'''
+
+
+
+fragment_glow = '''
+#version 450 core
+
+out vec4 fragColor;
+
+in vec2 UVs;
+in vec3 norms;
+in vec3 pos;
+
+uniform vec3 pointLight;
+uniform mat4 color;
+uniform sampler2D tex;
+
+
+void main()
+{
+    float intensity = dot(norms, normalize(pointLight - pos));
+    
+    vec3 color = vec3(1,1,0);
+    vec3 dir = vec3(0,1,0); // high noon  
+    vec4 returnColor = vec4(color, 1.0);
+    vec3 fNormal = vec3(1,0,1);
+    float diffuse = .25 + dot(fNormal,dir);
+    
+    fragColor = (texture(tex, UVs) * intensity) + (returnColor*diffuse);
+    
+    
+}
+'''
+
+fragment_colors = '''
+#version 450 core
+
+out vec4 fragColor;
+
+in vec2 UVs;
+in vec3 norms;
+in vec3 pos;
+
+uniform vec3 pointLight;
+uniform mat4 color;
+uniform sampler2D tex;
+
+
+void main()
+{
+    float intensity = dot(norms, normalize(pointLight - pos));
+
+    vec3 color = vec3(pos* 0.5 + 0.5);
+    vec3 dir = vec3(0,1,0); // high noon  
+    vec4 returnColor = vec4(color, 1.0);
+    vec3 fNormal = vec3(-1,0,-1);
+    float diffuse = .25 + dot(fNormal,dir);
+
+    fragColor = (texture(tex, UVs) * intensity) + (returnColor*diffuse);
+
+
 }
 '''

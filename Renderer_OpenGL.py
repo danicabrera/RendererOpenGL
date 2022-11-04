@@ -18,16 +18,17 @@ clock = pygame.time.Clock()
 
 rend = Renderer(screen)
 
-rend.setShaders(vertex_shader, fragment_toon_shader)
+rend.setShaders(vertex_shader, fragment_colors)
 
 rend.target.z = -5
 
 face = Model("Penguin.obj", "Penguin.bmp")
 
 face.position.z -= 5
-face.scale.x = 2
-face.scale.y = 2
-face.scale.z = 2
+face.position.y -= 1
+face.scale.x = 3
+face.scale.y = 3
+face.scale.z = 3
 
 rend.scene.append( face )
 
@@ -51,16 +52,18 @@ while isRunning:
             elif event.key == pygame.K_x:
                 rend.wireframeMode()
 
-            
-
-
 
     if keys[K_a]:
-        rend.camPosition.x -= 30 * deltaTime
+        rend.camPosition.x -= 10 * deltaTime
 
     elif keys[K_d]:
-        rend.camPosition.x += 30 * deltaTime
+        rend.camPosition.x += 10 * deltaTime
 
+    if keys[K_q]:
+        rend.camPosition.z -= 5 * deltaTime
+
+    elif keys[K_e]:
+        rend.camPosition.z += 5 * deltaTime
 
     if keys[K_w]:
         rend.camPosition.y += 10 * deltaTime
