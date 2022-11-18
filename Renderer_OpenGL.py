@@ -1,5 +1,6 @@
 from pickle import *
 import pygame
+import time
 from pygame.locals import *
 
 from shaders import *
@@ -27,13 +28,13 @@ rend.target.z = -5
 #Sword
 #tree
 #rose
-face = Model("Penguin.obj", "Model.bmp")
+face = Model("Penguin.obj", "Penguin.bmp")
 
 face.position.z -= 5
 face.position.y -= 1
-face.scale.x = 0.25
-face.scale.y = 0.25
-face.scale.z = 0.25
+face.scale.x = 2
+face.scale.y = 2
+face.scale.z = 2
 
 rend.scene.append( face )
 value = 1
@@ -119,22 +120,24 @@ while isRunning:
             face = Model("Penguin.obj", "Penguin.bmp")
             face.position.z -= 5
             face.position.y -= 1
-            face.scale.x = 0.25
-            face.scale.y = 0.25
-            face.scale.z = 0.25
+            face.scale.x = 2
+            face.scale.y = 2
+            face.scale.z = 2
             rend.scene.append(face)
+            rend.update()
 
             modelo = 2
 
         elif modelo == 2:
             rend.scene.clear()
-            face = Model("rose.obj", "Model.bmp")
+            face = Model("rose.obj", "rosa0.bmp")
             face.position.z -= 5
             face.position.y -= 1
-            face.scale.x = 0.25
-            face.scale.y = 0.25
-            face.scale.z = 0.25
+            face.scale.x = 0.025
+            face.scale.y = 0.025
+            face.scale.z = 0.025
             rend.scene.append(face)
+            rend.update()
 
             modelo = 3
 
@@ -147,28 +150,34 @@ while isRunning:
             face.scale.y = 0.25
             face.scale.z = 0.25
             rend.scene.append(face)
+            rend.update()
+
 
             modelo = 4
         elif modelo == 4:
             rend.scene.clear()
-            face = Model("Sword.obj", "Model.bmp")
+            face = Model("Sword.obj", "Sword.bmp")
             face.position.z -= 5
             face.position.y -= 1
-            face.scale.x = 0.25
-            face.scale.y = 0.25
-            face.scale.z = 0.25
+            face.scale.x = 0.07
+            face.scale.y = 0.07
+            face.scale.z = 0.07
             rend.scene.append(face)
+            rend.update()
+
 
             modelo = 5
         elif modelo == 5:
             rend.scene.clear()
-            face = Model("tree.obj", "Model.bmp")
+            face = Model("tree.obj", "wood4.bmp")
             face.position.z -= 5
             face.position.y -= 1
-            face.scale.x = 0.25
-            face.scale.y = 0.25
-            face.scale.z = 0.25
+            face.scale.x = 0.1
+            face.scale.y = 0.1
+            face.scale.z = 0.1
             rend.scene.append(face)
+            rend.update()
+
 
             modelo = 1
 
