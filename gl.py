@@ -174,6 +174,7 @@ class Renderer(object):
 
         self.target = glm.vec3(0,0,0)
         self.angle = 0
+        self.angle2 = 0
         self.camDistance = 5
 
 
@@ -217,8 +218,8 @@ class Renderer(object):
             self.active_shader = None
 
     def update(self):
-        self.viewMatrix = self.getViewMatrix()
-        # self.viewMatrix = glm.lookAt(self.camPosition, self.target, glm.vec3(0,1,0))
+        # self.viewMatrix = self.getViewMatrix()
+        self.viewMatrix = glm.lookAt(self.camPosition, self.target, glm.vec3(0,1,0))
 
     def render(self):
         glClearColor(0.2, 0.2, 0.2, 1)
